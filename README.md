@@ -13,7 +13,7 @@ A Flutter app integrated with Firebase to automate egg quality inspection and mo
 
 ## Screenshots
 
-*Add screenshots here to showcase your app UI.*
+![Dashboard](assets/screenshots/dashboard.png)
 
 ## Getting Started
 
