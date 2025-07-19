@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "988449803589",
+    "project_id": "nancyfresheggs",
+    "storage_bucket": "nancyfresheggs.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:988449803589:android:7c7cb42d65c8853f79c22c",
+        "android_client_info": {
+          "package_name": "com.example.egg_sorting_dashboard"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAhD5M90avDvT0sQxPJfHsqZ5QGTg5WPsw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
