@@ -1,16 +1,30 @@
-# egg_sorting_dashboard
+# Egg Sorting Dashboard
 
-A new Flutter project.
+A Flutter app integrated with Firebase to automate egg quality inspection and monitoring.
+
+## Features
+
+- Real-time dashboard showing total, fresh, and rotten eggs.
+- Visual analytics with pie and line charts for weekly egg quality trends.
+- Detailed, filterable inspection logs with confidence scores.
+- Manual egg log entry with camera photo capture.
+- Background automatic logging simulating egg data.
+- Cross-platform support (Android, iOS, Web, macOS, Windows).
+
+## Screenshots
+
+*Add screenshots here to showcase your app UI.*
 
 ## Getting Started
 
-This project is a starting point for a Flutter application.
+### Prerequisites
 
-A few resources to get you started if this is your first Flutter project:
+- Flutter SDK installed ([install guide](https://flutter.dev/docs/get-started/install))dd
+- Firebase project set up with Firestore enabled.
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+### Installation
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+1. Clone the repo:
+   ```bash
+   git clone https://github.com/your-username/egg-sorting-dashboard.git
+   cd egg-sorting-dashboard
