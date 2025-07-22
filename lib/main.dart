@@ -5,7 +5,8 @@ import 'pages/dashboard_page.dart';
 import 'pages/manual_log_page.dart';
 import 'pages/trends_page.dart';
 import 'pages/egg_logs_page.dart';
-import 'pages/auto_egg_logger_.dart'; 
+import 'pages/auto_egg_logger_.dart';
+import 'pages/loading_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -30,8 +31,8 @@ class MyApp extends StatelessWidget {
       ),
       home: Stack(
         children: const [
-          BottomNavApp(),    
-          AutoEggLogger(),  
+          LoadingScreen(),   // Loading screen first
+          AutoEggLogger(),   // Invisible background logger
         ],
       ),
     );
@@ -59,14 +60,9 @@ class _BottomNavAppState extends State<BottomNavApp> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFFFFF8E7),
-      body: AnimatedSwitcher(
-        duration: const Duration(milliseconds: 300),
-        switchInCurve: Curves.easeIn,
-        switchOutCurve: Curves.easeOut,
-        transitionBuilder: (Widget child, Animation<double> animation) {
-          return FadeTransition(opacity: animation, child: child);
-        },
-        child: _pages[_currentIndex],
+      body: IndexedStack(
+        index: _currentIndex,
+        children: _pages,
       ),
       bottomNavigationBar: Container(
         decoration: const BoxDecoration(

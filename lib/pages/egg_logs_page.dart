@@ -12,6 +12,7 @@ class EggLogsPage extends StatefulWidget {
 
 class _EggLogsPageState extends State<EggLogsPage> {
   String _filter = 'fresh';
+  String _timeFilter = 'All Time';
 
   @override
   Widget build(BuildContext context) {
@@ -27,18 +28,37 @@ class _EggLogsPageState extends State<EggLogsPage> {
             if (!snapshot.hasData) return const CircularProgressIndicator();
 
             final docs = snapshot.data!.docs;
-            final filteredDocs = _filter == 'all'
-                ? docs
-                : docs
-                    .where((doc) =>
-                        (doc['status'] ?? '').toString().toLowerCase() == _filter)
-                    .toList();
 
-            final total = docs.length;
-            final fresh = docs
+            final now = DateTime.now();
+            DateTime startDate;
+            if (_timeFilter == 'Today') {
+              startDate = DateTime(now.year, now.month, now.day);
+            } else if (_timeFilter == 'Week') {
+              startDate = now.subtract(const Duration(days: 7));
+            } else {
+              startDate = DateTime(2000);
+            }
+
+            final timeFilteredDocs = docs.where((doc) {
+              final timestamp = (doc['timestamp'] as Timestamp).toDate();
+              return timestamp.isAfter(startDate);
+            }).toList();
+
+            final filteredDocs = _filter == 'all'
+                ? timeFilteredDocs
+                : timeFilteredDocs
+                      .where(
+                        (doc) =>
+                            (doc['status'] ?? '').toString().toLowerCase() ==
+                            _filter,
+                      )
+                      .toList();
+
+            final total = timeFilteredDocs.length;
+            final fresh = timeFilteredDocs
                 .where((d) => (d['status'] ?? '').toString() == 'fresh')
                 .length;
-            final rotten = docs
+            final rotten = timeFilteredDocs
                 .where((d) => (d['status'] ?? '').toString() == 'rotten')
                 .length;
 
@@ -48,15 +68,68 @@ class _EggLogsPageState extends State<EggLogsPage> {
                 const Text(
                   'Quality History',
                   style: TextStyle(
-                      fontSize: 22,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.brown),
+                    fontSize: 22,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.brown,
+                  ),
                 ),
                 const Text(
                   'Detailed inspection records and analytics',
                   style: TextStyle(color: Colors.brown),
                 ),
                 const SizedBox(height: 16),
+
+                // Time filter dropdown (Moved Up)
+                Center(
+                  child: DropdownButtonHideUnderline(
+                    child: DropdownButton<String>(
+                      value: _timeFilter,
+                      style: const TextStyle(fontSize: 13, color: Colors.brown),
+                      dropdownColor: Colors.white,
+                      icon: const Icon(
+                        Icons.arrow_drop_down,
+                        color: Colors.brown,
+                      ),
+                      items: ['All Time', 'Today', 'Week']
+                          .map(
+                            (value) => DropdownMenuItem<String>(
+                              value: value,
+                              child: Text(value),
+                            ),
+                          )
+                          .toList(),
+                      onChanged: (newValue) {
+                        setState(() {
+                          _timeFilter = newValue!;
+                        });
+                      },
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 8),
+
+                // Egg counts
+                Container(
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 16,
+                    horizontal: 12,
+                  ),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(14),
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      _buildCountTile("Total Records", total, Colors.brown),
+                      _buildCountTile("Fresh", fresh, Colors.green),
+                      _buildCountTile("Rotten", rotten, Colors.orange),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 12),
+
+                // Filter buttons (Moved below counts)
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: ['all', 'fresh', 'rotten'].map((type) {
@@ -93,23 +166,8 @@ class _EggLogsPageState extends State<EggLogsPage> {
                   }).toList(),
                 ),
                 const SizedBox(height: 16),
-                Container(
-                  padding:
-                      const EdgeInsets.symmetric(vertical: 16, horizontal: 12),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(14),
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      _buildCountTile("Total Records", total, Colors.brown),
-                      _buildCountTile("Fresh", fresh, Colors.green),
-                      _buildCountTile("Rotten", rotten, Colors.orange),
-                    ],
-                  ),
-                ),
-                const SizedBox(height: 12),
+
+                // Logs list
                 Expanded(
                   child: ListView.builder(
                     itemCount: filteredDocs.length,
@@ -139,7 +197,8 @@ class _EggLogsPageState extends State<EggLogsPage> {
                             builder: (context) => AlertDialog(
                               title: const Text('Confirm Delete'),
                               content: const Text(
-                                  'Are you sure you want to delete this log?'),
+                                'Are you sure you want to delete this log?',
+                              ),
                               actions: [
                                 TextButton(
                                   onPressed: () =>
@@ -147,7 +206,8 @@ class _EggLogsPageState extends State<EggLogsPage> {
                                   child: const Text('Cancel'),
                                 ),
                                 TextButton(
-                                  onPressed: () => Navigator.of(context).pop(true),
+                                  onPressed: () =>
+                                      Navigator.of(context).pop(true),
                                   child: const Text('Delete'),
                                 ),
                               ],
@@ -182,8 +242,12 @@ class _EggLogsPageState extends State<EggLogsPage> {
                               Row(
                                 children: [
                                   Icon(
-                                    isFresh ? Icons.check_circle : Icons.warning,
-                                    color: isFresh ? Colors.green : Colors.orange,
+                                    isFresh
+                                        ? Icons.check_circle
+                                        : Icons.warning,
+                                    color: isFresh
+                                        ? Colors.green
+                                        : Colors.orange,
                                   ),
                                   const SizedBox(width: 8),
                                   Column(
@@ -202,7 +266,9 @@ class _EggLogsPageState extends State<EggLogsPage> {
                                   const Spacer(),
                                   Container(
                                     padding: const EdgeInsets.symmetric(
-                                        horizontal: 10, vertical: 4),
+                                      horizontal: 10,
+                                      vertical: 4,
+                                    ),
                                     decoration: BoxDecoration(
                                       color: Colors.green.shade50,
                                       borderRadius: BorderRadius.circular(20),
@@ -214,28 +280,34 @@ class _EggLogsPageState extends State<EggLogsPage> {
                                         color: _getConfidenceColor(confidence),
                                       ),
                                     ),
-                                  )
+                                  ),
                                 ],
                               ),
                               const SizedBox(height: 10),
                               Row(
                                 children: [
-                                  const Icon(Icons.access_time_rounded,
-                                      size: 16, color: Colors.orange),
+                                  const Icon(
+                                    Icons.access_time_rounded,
+                                    size: 16,
+                                    color: Colors.orange,
+                                  ),
                                   const SizedBox(width: 4),
                                   Text('$timeStr • $dateStr'),
                                   const Spacer(),
-                                  Icon(Icons.trending_up,
-                                      size: 16,
-                                      color: _getConfidenceColor(confidence)),
+                                  Icon(
+                                    Icons.trending_up,
+                                    size: 16,
+                                    color: _getConfidenceColor(confidence),
+                                  ),
                                   const SizedBox(width: 4),
                                   Text(
                                     _getConfidenceLabel(confidence),
                                     style: TextStyle(
-                                        fontSize: 12,
-                                        fontWeight: FontWeight.w500,
-                                        color: _getConfidenceColor(confidence)),
-                                  )
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.w500,
+                                      color: _getConfidenceColor(confidence),
+                                    ),
+                                  ),
                                 ],
                               ),
                             ],
@@ -244,7 +316,7 @@ class _EggLogsPageState extends State<EggLogsPage> {
                       );
                     },
                   ),
-                )
+                ),
               ],
             );
           },
@@ -268,15 +340,16 @@ class _EggLogsPageState extends State<EggLogsPage> {
   Widget _buildCountTile(String label, int count, Color color) {
     return Column(
       children: [
-        Text('$count',
-            style: TextStyle(
-                fontSize: 22, fontWeight: FontWeight.bold, color: color)),
+        Text(
+          '$count',
+          style: TextStyle(
+            fontSize: 22,
+            fontWeight: FontWeight.bold,
+            color: color,
+          ),
+        ),
         const SizedBox(height: 4),
-        Text(label,
-            style: TextStyle(
-              fontSize: 12,
-              color: color,
-            )),
+        Text(label, style: TextStyle(fontSize: 12, color: color)),
       ],
     );
   }

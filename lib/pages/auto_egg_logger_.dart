@@ -28,7 +28,7 @@ class _AutoEggLoggerState extends State<AutoEggLogger> {
   }
 
   void _startLogging() {
-    _timer = Timer.periodic(const Duration(seconds: 15), (timer) {
+    _timer = Timer.periodic(const Duration(seconds: 10), (timer) {
       final now = DateTime.now();
 
       final morningStart = DateTime(now.year, now.month, now.day, 8, 30);
