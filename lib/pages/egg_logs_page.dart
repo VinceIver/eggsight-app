@@ -79,7 +79,7 @@ class _EggLogsPageState extends State<EggLogsPage> {
                 ),
                 const SizedBox(height: 16),
 
-                // Time filter dropdown (Moved Up)
+           
                 Center(
                   child: DropdownButtonHideUnderline(
                     child: DropdownButton<String>(
@@ -129,7 +129,7 @@ class _EggLogsPageState extends State<EggLogsPage> {
                 ),
                 const SizedBox(height: 12),
 
-                // Filter buttons (Moved below counts)
+               
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: ['all', 'fresh', 'rotten'].map((type) {

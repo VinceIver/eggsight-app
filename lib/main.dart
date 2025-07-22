@@ -31,8 +31,8 @@ class MyApp extends StatelessWidget {
       ),
       home: Stack(
         children: const [
-          LoadingScreen(),   // Loading screen first
-          AutoEggLogger(),   // Invisible background logger
+          LoadingScreen(),  
+          AutoEggLogger(),   
         ],
       ),
     );
