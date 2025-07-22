@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import '../main.dart';
+import '../pages/bottom-nav.dart'; 
 
 class LoadingScreen extends StatefulWidget {
   const LoadingScreen({super.key});
@@ -15,7 +15,7 @@ class _LoadingScreenState extends State<LoadingScreen> {
     super.initState();
     Timer(const Duration(seconds: 2), () {
       Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (context) => const BottomNavApp()), 
+        MaterialPageRoute(builder: (context) => const BottomNavApp()),
       );
     });
   }

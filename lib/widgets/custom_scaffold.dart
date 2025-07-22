@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import '../main.dart';
 import '../pages/about_page.dart';
+import '../pages/bottom-nav.dart';
 
 class CustomScaffold extends StatelessWidget {
   final Widget body;
