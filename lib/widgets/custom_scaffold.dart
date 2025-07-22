@@ -115,7 +115,7 @@ class CustomScaffold extends StatelessWidget {
         title: Text(
           'Home',
           style: const TextStyle(
-            fontFamily: 'RobotoBold',       // Your custom font family name
+            fontFamily: 'RobotoBold',  
             fontWeight: FontWeight.bold,
             fontSize: 16,
             color: Colors.brown,

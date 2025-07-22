@@ -32,7 +32,7 @@ class _BottomNavAppState extends State<BottomNavApp> {
             index: _currentIndex,
             children: _pages,
           ),
-          const AutoEggLogger(), // 👈 runs in background
+          const AutoEggLogger(),
         ],
       ),
       bottomNavigationBar: Container(
